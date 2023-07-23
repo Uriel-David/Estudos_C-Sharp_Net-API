@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Refit;
 using ToDoList.Data;
+using ToDoList.Integrations;
+using ToDoList.Integrations.Interfaces;
+using ToDoList.Integrations.Refits;
 using ToDoList.Repositories;
 using ToDoList.Repositories.Interfaces;
 
@@ -25,6 +29,10 @@ namespace ToDoList
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+            builder.Services.AddScoped<IViaCepIntegration, ViaCepIntegration>();
+            builder.Services.AddRefitClient<IViaCepIntegrationRefit>().ConfigureHttpClient(client => {
+                client.BaseAddress = new Uri("https://viacep.com.br");
+            });
 
             var app = builder.Build();
 
